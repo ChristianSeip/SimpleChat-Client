@@ -1,0 +1,19 @@
+<mat-card>
+  <mat-card-subtitle>Don't have an account yet? <a routerLink="/register">Sign up</a></mat-card-subtitle>
+  <mat-card-content>
+    <mat-form-field appearance="legacy">
+      <mat-label>Username</mat-label>
+      <input type="text" matInput placeholder="Username" [(ngModel)]="username" name="username" required>
+      <mat-icon matSuffix>person</mat-icon>
+    </mat-form-field>
+    <mat-form-field appearance="legacy">
+      <mat-label>Password</mat-label>
+      <input type="password" matInput placeholder="Password" [(ngModel)]="password" name="password" required>
+      <mat-icon matSuffix>key</mat-icon>
+    </mat-form-field>
+    <mat-card-actions>
+      <button mat-raised-button color="primary" [disabled]="!isValidForm()" (click)="login()">Login</button>
+    </mat-card-actions>
+  </mat-card-content>
+</mat-card>
+

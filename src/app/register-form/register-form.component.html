@@ -1,0 +1,30 @@
+<mat-card>
+  <mat-card-subtitle>You already have an account? <a routerLink="/login">Log in</a></mat-card-subtitle>
+  <mat-card-content>
+    <mat-form-field appearance="legacy">
+      <mat-label>What is your username?</mat-label>
+      <input type="text" matInput placeholder="Username" [(ngModel)]="username" (change)="checkNameAvailability()" name="username"
+             minlength="{{minUsernameLength}}" maxlength="{{maxUsernameLength}}" pattern="[a-zA-Z0-9]+" autocomplete="off" required>
+      <mat-icon matSuffix>person</mat-icon>
+      <mat-hint>3-15 alphanumeric characters<br><span class="error-text">{{usernameTooltip}}</span></mat-hint>
+    </mat-form-field>
+    <mat-form-field appearance="legacy">
+      <mat-label>Your Password</mat-label>
+      <input type="password" matInput placeholder="Password" [(ngModel)]="password" name="password" autocomplete="off" required>
+      <mat-icon matSuffix>key</mat-icon>
+      <mat-hint>4-30 characters</mat-hint>
+    </mat-form-field>
+    <mat-form-field appearance="legacy">
+      <mat-label>How old are you?</mat-label>
+      <input type="number" matInput placeholder="Age" [(ngModel)]="age" name="age" min="{{minAge}}" max="{{maxAge}}" required>
+      <mat-icon matSuffix>grade</mat-icon>
+      <mat-hint>Between 18 and 99</mat-hint>
+    </mat-form-field>
+    <mat-card-actions align="end">
+      <button mat-raised-button color="primary" [disabled]="!isValidForm()" (click)="sendForm()">Sign up</button>
+    </mat-card-actions>
+  </mat-card-content>
+  <mat-card-footer>
+    <p>I agree to the <a href="https://www.seip.io/privacy" target="_blank">privacy policy</a>.</p>
+  </mat-card-footer>
+</mat-card>
