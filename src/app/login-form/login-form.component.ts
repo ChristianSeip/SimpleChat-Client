@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {DialogComponent} from "../dialog/dialog.component";
 import {WebsocketService} from "../../services/websocket.service";
-import {MatDialog} from "@angular/material/dialog";
 import {Router} from "@angular/router";
 
 @Component({
@@ -14,12 +12,12 @@ export class LoginFormComponent implements OnInit {
   username: string = '';
   password: string = '';
 
-  constructor(private router: Router, private wss: WebsocketService, private dialog: MatDialog) { }
+  constructor(private router: Router, private wss: WebsocketService) { }
 
   ngOnInit(): void {
     this.wss.incoming.subscribe((incoming) => {
         if(incoming.event === 'Login' && incoming.data.success) {
-          this.router.navigate(['/chatroom', 1]);
+          this.router.navigate(['/chatroom']);
         }
     });
   }

@@ -7,7 +7,7 @@ const routes: Routes = [
   {path: 'login', component: LandingComponent},
   {path: 'register', component: LandingComponent},
   {path: '', redirectTo: 'register', pathMatch: 'full'},
-  {path: 'chatroom/:id', component: ChatroomComponent}
+  {path: 'chatroom', component: ChatroomComponent}
 ];
 
 @NgModule({

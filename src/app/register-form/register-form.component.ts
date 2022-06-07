@@ -31,7 +31,7 @@ export class RegisterFormComponent implements OnInit {
         });
       }
       if(incoming.event === 'Login' && incoming.data.success) {
-        this.router.navigate(['/chatroom', 1]);
+        this.router.navigate(['/chatroom']);
       }
       if(incoming.event === 'NameAvailabilityCheck' && !incoming.data.success) {
         this.usernameTooltip = 'This name is already taken.';
