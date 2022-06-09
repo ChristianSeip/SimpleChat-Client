@@ -23,7 +23,8 @@ export class WebsocketService {
 
   private buffer: OutgoingMessage[] | undefined;
   private socket: WebSocket | undefined;
-
+  private intval: any;
+  private reconnectCount: number = 0;
 
   constructor() {
     this.connect();
@@ -33,7 +34,7 @@ export class WebsocketService {
    * Start the websocket connection.
    */
   connect(): void {
-    this.socket = new WebSocket('ws://localhost:3000');
+    this.socket = new WebSocket('wss://localhost:3000');
     this.buffer = [];
     this.socket.addEventListener('message', this.onMessage);
     this.socket.addEventListener('open', this.onOpen);
@@ -91,11 +92,21 @@ export class WebsocketService {
 
   private onError = (event: Event): void => {
     console.error('A connection error has occurred.', event);
-    this.incoming.next({event: 'Dialog', data: {msg: 'A connection error has occurred.'}});
+    let msg = 'A connection error has occurred. '
+    msg += this.reconnectCount < 3 ? 'We\'ll try to reconnect you in 10 seconds.' : 'It was not possible to reconnect.';
+    this.incoming.next({event: 'Dialog', data: {msg: msg}});
   };
 
   private onClose = (event: CloseEvent): void => {
     console.info('Connection closed.', event);
-    this.connect();
+    if(!this.intval) {
+      this.intval = setInterval(() => {
+        this.connect()
+        this.reconnectCount++;
+      }, 10000);
+    }
+    if(this.reconnectCount == 3) {
+      clearInterval(this.intval);
+    }
   };
 }
