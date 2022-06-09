@@ -21,6 +21,15 @@ header {
   }
 }
 
+.channel-header {
+  display: flex;
+  align-items: center;
+}
+
+.logout-button {
+  margin-right: 16px;
+}
+
 main {
   display: flex;
   flex-direction: column;
@@ -61,6 +70,9 @@ mat-form-field {
   list-style-type: none;
   overflow-y: auto;
   overflow-x: hidden;
+  li {
+    margin-bottom: 8px;
+  }
 }
 
 .user-list {
@@ -72,6 +84,7 @@ mat-form-field {
   overflow: auto;
   li {
     white-space: nowrap;
+    margin-bottom: 8px;
   }
 }
 
@@ -81,4 +94,7 @@ mat-form-field {
 .system-message {
   color: #007eff;
   font-style: italic;
+}
+
+@media screen and (max-width: 600px){
 }

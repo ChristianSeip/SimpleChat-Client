@@ -4,11 +4,34 @@ import {WebsocketService} from "../../../services/websocket.service";
 import {UserService} from "../../../services/user.service";
 import {ChatmessageService} from "../../../services/chatmessage.service";
 import {Router} from "@angular/router";
+import {trigger, state, style, animate, transition, keyframes} from '@angular/animations';
+import {BreakpointObserver, BreakpointState} from "@angular/cdk/layout";
 
 @Component({
   selector: 'app-chatroom',
   templateUrl: './chatroom.component.html',
-  styleUrls: ['./chatroom.component.scss']
+  styleUrls: ['./chatroom.component.scss'],
+  animations: [
+    trigger('openClose', [
+      state('open', style({
+      })),
+      state('closed', style({
+        display: 'none'
+      })),
+      transition('open => closed', [
+        animate("400ms", keyframes([
+          style({ opacity: 1, transform: 'translateX(0)'}),
+          style({ opacity: 0, transform: 'translateX(250px)'}),
+        ]))
+      ]),
+      transition('closed => open', [
+        animate("400ms", keyframes([
+          style({ display: 'flex', opacity: 0, transform: 'translateX(250px)'}),
+          style({ opacity: 1, transform: 'translateX(0)'}),
+        ]))
+      ]),
+    ]),
+  ],
 })
 export class ChatroomComponent implements OnInit {
 
@@ -16,8 +39,17 @@ export class ChatroomComponent implements OnInit {
   inputMessage: string = '';
   messages: any = [];
   users: UserService[] = [];
+  isOpen: boolean = true;
+  width: number = 0;
 
-  constructor(private cookie: CookieService, private wss: WebsocketService, private router: Router) {
+  constructor(private cookie: CookieService, private wss: WebsocketService, private router: Router, private breakpointObserver: BreakpointObserver) {
+    this.width = window.innerWidth;
+    this.breakpointObserver.observe(["(max-width: 600px)"]).subscribe((result: BreakpointState) => {
+      this.width = window.innerWidth;
+      if(result.matches && this.isOpen) {
+        this.toggle(true);
+      }
+    });
   }
 
   ngOnInit(): void {
@@ -129,5 +161,12 @@ export class ChatroomComponent implements OnInit {
     data.users.forEach((item: any) => {
       this.addUser(item);
     });
+  }
+
+  toggle(force: boolean) {
+    if(!force && this.width > 600) {
+      return;
+    }
+    this.isOpen = !this.isOpen;
   }
 }

@@ -1,21 +1,21 @@
 <div class="container">
   <header>
-    <h2 [textContent]="chatname"></h2>
-    <div>
-      <button class="user-list-switch" mat-icon-button aria-label="Switch user list visibility.">
-        <mat-icon>person</mat-icon>
-      </button>
-      <button mat-icon-button aria-label="Logout" (click)="logout()">
+    <div class="channel-header">
+      <button class="logout-button" mat-icon-button aria-label="Logout" (click)="logout()">
         <mat-icon>power_settings_new</mat-icon>
       </button>
+      <h2 [textContent]="chatname"></h2>
     </div>
+    <button class="user-list-switch" mat-icon-button aria-label="Switch user list visibility." (click)="toggle(true)">
+       <mat-icon>person</mat-icon> ({{users.length}})
+    </button>
   </header>
   <main>
     <div class="chat-container">
         <ul class="chat-messages">
           <li *ngFor="let m of messages" class="{{m.getMessageClass()}}">{{m.getMessage()}}</li>
         </ul>
-        <ul class="user-list">
+        <ul class="user-list" [@openClose]="isOpen ? 'open' : 'closed'">
           <li *ngFor="let u of users">{{u.username}} ({{u.getAge()}})</li>
         </ul>
     </div>

@@ -3,8 +3,9 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 0;
   margin: 0;
+  padding-left: 8px;
+  padding-right: 8px;
   background: url('../../../assets/images/background.jpg') no-repeat center center fixed;
   background-size: cover;
   height: calc(100vh - 83px);
@@ -16,62 +17,7 @@ header {
   align-items: center;
   background-color: rgb(38, 3, 63);
   color: #c9c9c9;
-  width: 400px;
+  max-width: 400px;
   padding: 16px;
   border-radius: 4px;
-}
-
-footer {
-  display: flex;
-  justify-content: space-between;
-  padding-top: 32px;
-  padding-bottom: 32px;
-  padding-left: 128px;
-  padding-right: 128px;
-  background-color: rgb(38, 3, 63);
-  color: #c9c9c9;
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  a {
-    color: #c9c9c9;
-    text-decoration: none;
-    &:hover {
-      color: #f8f8f8;
-    }
-  }
-}
-
-.legal-links {
-  margin: 0;
-  padding: 0;
-  list-style-type: none;
-  li {
-    display: inline;
-    margin-right: 32px;
-    &:last-child {
-      margin: 0;
-    }
-  }
-}
-
-@media screen and (max-width: 500px) {
-  footer {
-    flex-direction: column;
-    justify-content: center;
-    text-align: center;
-    padding-left: 64px;
-    padding-right: 64px;
-  }
-  .legal-links {
-    margin-bottom: 8px;
-  }
-}
-
-@media screen and (max-width: 330px) {
-  footer {
-    padding-left: 16px;
-    padding-right: 16px;
-  }
 }
