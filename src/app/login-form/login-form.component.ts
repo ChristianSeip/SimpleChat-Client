@@ -22,10 +22,16 @@ export class LoginFormComponent implements OnInit {
     });
   }
 
+  /**
+   * Check if login form is valid.
+   */
   isValidForm() {
     return this.username.length >= 1 && this.password.length >= 4;
   }
 
+  /**
+   * Send login to server.
+   */
   login() {
     if(this.isValidForm()) {
       this.wss.send({

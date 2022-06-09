@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import {CookieService} from "../../../services/cookie.service";
 import {WebsocketService} from "../../../services/websocket.service";
+import {UserService} from "../../../services/user.service";
+import {ChatmessageService} from "../../../services/chatmessage.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-chatroom',
@@ -9,15 +12,122 @@ import {WebsocketService} from "../../../services/websocket.service";
 })
 export class ChatroomComponent implements OnInit {
 
-  constructor(private cookie: CookieService, private wss: WebsocketService) {
+  chatname: string = 'Welcome';
+  inputMessage: string = '';
+  messages: any = [];
+  users: UserService[] = [];
+
+  constructor(private cookie: CookieService, private wss: WebsocketService, private router: Router) {
   }
 
   ngOnInit(): void {
     this.wss.incoming.subscribe((incoming) => {
-      console.log(incoming);
+      switch (incoming.event) {
+        case 'InitChat':
+          this.initChat(incoming.data);
+          break;
+        case 'UserJoined':
+          this.addUser(incoming.data);
+          break;
+        case 'UserLeft':
+          this.removeUser(incoming.data.uuid);
+          break;
+        case 'MessageReceived':
+          this.addMessage(incoming.data);
+          break;
+      }
     });
     this.wss.send({event: 'Login', data: {id: this.cookie.getCookie('uuid'), key: this.cookie.getCookie('sid'), keyType: 'session'}});
     this.wss.send({event: 'JoinChannel', data: {uuid: this.cookie.getCookie('uuid'), sid: this.cookie.getCookie('sid')}});
   }
 
+  /**
+   * Destroy user session and redirect to login page.
+   */
+  logout() {
+    this.wss.send({event: 'Logout', data: {uuid: this.cookie.getCookie('uuid'), sid: this.cookie.getCookie('sid')}});
+    this.cookie.deleteCookie('uuid');
+    this.cookie.deleteCookie('sid');
+    this.router.navigate(['/login']);
+  }
+
+  /**
+   * Add user to user list.
+   *
+   * @param data
+   */
+  addUser(data: any) {
+    this.removeUser(data.uuid);
+    let u = new UserService();
+    u.uuid = data.uuid;
+    u.username = data.username;
+    u.setAge(data.age);
+    u.setLastActivity(data.lastActivity);
+    this.users.push(u);
+  }
+
+  /**
+   * Remove user from user list.
+   *
+   * @param uuid
+   */
+  removeUser(uuid: string) {
+    for(let i = 0; i < this.users.length; i++) {
+      if(this.users[i].uuid === uuid) {
+        this.users.splice(i, 1);
+      }
+    }
+  }
+
+  /**
+   * Add message to message list.
+   *
+   * @param data
+   */
+  addMessage(data: any) {
+    let m = new ChatmessageService();
+    m.text = data.msg;
+    m.username = data.username;
+    m.uuid = data.uuid;
+    m.time = parseInt(data.timestamp);
+    m.type = data.type;
+    this.messages.push(m);
+  }
+
+  /**
+   * Send message to server.
+   */
+  sendMessage() {
+    if(this.isValidMessage()) {
+      this.wss.send({
+        event: 'SendMessage',
+        data: {
+          uuid: this.cookie.getCookie('uuid'),
+          sid: this.cookie.getCookie('sid'),
+          msg: this.inputMessage,
+        }
+      });
+      this.inputMessage = '';
+    }
+  }
+
+  /**
+   * Check if input message is valid.
+   */
+  isValidMessage(): boolean {
+    return this.inputMessage.length >= 1 && this.inputMessage.length <= 1000;
+  }
+
+  /**
+   * Init chat channel.
+   *
+   * @param data
+   */
+  initChat(data: any) {
+    this.users = [];
+    this.chatname = data.channelname;
+    data.users.forEach((item: any) => {
+      this.addUser(item);
+    });
+  }
 }

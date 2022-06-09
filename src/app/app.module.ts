@@ -28,7 +28,7 @@ import {MatTooltipModule} from "@angular/material/tooltip";
     ChatroomComponent,
     LoginFormComponent,
     RegisterFormComponent,
-    DialogComponent
+    DialogComponent,
   ],
   imports: [
     BrowserModule,

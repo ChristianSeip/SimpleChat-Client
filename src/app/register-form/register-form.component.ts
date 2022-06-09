@@ -25,10 +25,7 @@ export class RegisterFormComponent implements OnInit {
   ngOnInit(): void {
     this.wss.incoming.subscribe((incoming) => {
       if (incoming.event === 'NewUser' && incoming.data.success) {
-        this.wss.send({
-          event: 'Login',
-          data: {id: this.username, key: this.password, keyType: 'password'},
-        });
+        this.wss.send({event: 'Login', data: {id: this.username, key: this.password, keyType: 'password'}});
       }
       if(incoming.event === 'Login' && incoming.data.success) {
         this.router.navigate(['/chatroom']);
@@ -39,10 +36,16 @@ export class RegisterFormComponent implements OnInit {
     });
   }
 
+  /**
+   * Check if age is valid.
+   */
   isValidAge(): boolean {
     return this.age !== null && this.age >= this.minAge && this.age <= this.maxAge;
   }
 
+  /**
+   * Check if username is available.
+   */
   checkNameAvailability() {
     this.usernameTooltip = '';
     if(this.isValidUsername()) {
@@ -53,19 +56,31 @@ export class RegisterFormComponent implements OnInit {
     }
   }
 
+  /**
+   * Check is username is valid.
+   */
   isValidUsername(): boolean {
     let regEx = new RegExp(`^[A-Za-z0-9]{${this.minUsernameLength},${this.maxUsernameLength}}$`);
     return regEx.test(this.username);
   }
 
+  /**
+   * Check if password is valid.
+   */
   isValidPassword(): boolean {
     return this.password.length >= this.minPasswordLength && this.password.length <= this.maxPasswordLength;
   }
 
+  /**
+   * Check if registration form is valid.
+   */
   isValidForm(): boolean {
     return this.isValidAge() && this.isValidUsername() && this.isValidPassword();
   }
 
+  /**
+   * Send form data to server.
+   */
   sendForm() {
     if(this.isValidForm()) {
       this.wss.send({

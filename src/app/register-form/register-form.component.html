@@ -1,6 +1,6 @@
 <mat-card>
   <mat-card-subtitle>You already have an account? <a routerLink="/login">Log in</a></mat-card-subtitle>
-  <mat-card-content>
+  <mat-card-content (keydown.enter)="sendForm()">
     <mat-form-field appearance="legacy">
       <mat-label>What is your username?</mat-label>
       <input type="text" matInput placeholder="Username" [(ngModel)]="username" (change)="checkNameAvailability()" name="username"

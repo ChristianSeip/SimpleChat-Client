@@ -17,7 +17,7 @@ export interface OutgoingMessage {
 export class WebsocketService {
 
   /**
-   * Emit the deserialized incoming messages
+   * Emit the deserialized incoming messages.
    */
   readonly incoming = new Subject<IncomingMessage>();
 
@@ -30,7 +30,7 @@ export class WebsocketService {
   }
 
   /**
-   * Start the websocket connection
+   * Start the websocket connection.
    */
   connect(): void {
     this.socket = new WebSocket('ws://localhost:3000');
@@ -42,7 +42,7 @@ export class WebsocketService {
   }
 
   /**
-   * Stop the websocket connection
+   * Stop the websocket connection.
    */
   disconnect(): void {
     if (!this.socket) {
@@ -57,6 +57,11 @@ export class WebsocketService {
     this.buffer = undefined;
   }
 
+  /**
+   * Send message to websocket server.
+   *
+   * @param msg
+   */
   send(msg: OutgoingMessage): void {
     if (!this.socket) {
       throw new Error('Message could not be sent. There is no connection to the server.');
@@ -91,5 +96,6 @@ export class WebsocketService {
 
   private onClose = (event: CloseEvent): void => {
     console.info('Connection closed.', event);
+    this.connect();
   };
 }
