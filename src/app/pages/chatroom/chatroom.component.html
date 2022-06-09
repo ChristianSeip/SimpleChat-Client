@@ -12,7 +12,7 @@
   </header>
   <main>
     <div class="chat-container">
-        <ul class="chat-messages">
+        <ul #chatMessageList class="chat-messages">
           <li *ngFor="let m of messages" class="{{m.getMessageClass()}}">{{m.getMessage()}}</li>
         </ul>
         <ul class="user-list" [@openClose]="isOpen ? 'open' : 'closed'">

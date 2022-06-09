@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {CookieService} from "../../../services/cookie.service";
 import {WebsocketService} from "../../../services/websocket.service";
 import {UserService} from "../../../services/user.service";
@@ -34,6 +34,8 @@ import {BreakpointObserver, BreakpointState} from "@angular/cdk/layout";
   ],
 })
 export class ChatroomComponent implements OnInit {
+
+  @ViewChild('chatMessageList') private chatMessageList: any;
 
   chatname: string = 'Welcome';
   inputMessage: string = '';
@@ -71,6 +73,17 @@ export class ChatroomComponent implements OnInit {
     });
     this.wss.send({event: 'Login', data: {id: this.cookie.getCookie('uuid'), key: this.cookie.getCookie('sid'), keyType: 'session'}});
     this.wss.send({event: 'JoinChannel', data: {uuid: this.cookie.getCookie('uuid'), sid: this.cookie.getCookie('sid')}});
+  }
+
+  /**
+   * Scroll
+   */
+  scrollToEndOfChat(): void {
+    this.chatMessageList.nativeElement.scroll({
+      top: this.chatMessageList.nativeElement.scrollHeight,
+      left: 0,
+      behavior: 'smooth'
+    });
   }
 
   /**
@@ -124,6 +137,7 @@ export class ChatroomComponent implements OnInit {
     m.time = parseInt(data.timestamp);
     m.type = data.type;
     this.messages.push(m);
+    setTimeout(() => this.scrollToEndOfChat(), 0);
   }
 
   /**
