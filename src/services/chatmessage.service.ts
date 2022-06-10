@@ -15,18 +15,6 @@ export class ChatmessageService {
   }
 
   /**
-   * Get formatted message.
-   */
-  getMessage() {
-    let msg = this.username;
-    if(this.type === 'PublicMessage' || this.type === 'PrivateMessage') {
-      msg += ':';
-    }
-    msg += ` ${this.text}`;
-    return msg;
-  }
-
-  /**
    * Get css class name for this message.
    */
   getMessageClass() {

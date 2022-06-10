@@ -20,6 +20,10 @@ import {MatDialogModule} from "@angular/material/dialog";
 import {WebsocketService} from "../services/websocket.service";
 import {CookieService} from "../services/cookie.service";
 import {MatTooltipModule} from "@angular/material/tooltip";
+import {registerLocaleData} from "@angular/common";
+import localeDe from '@angular/common/locales/de';
+
+registerLocaleData(localeDe);
 
 @NgModule({
   declarations: [
