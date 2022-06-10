@@ -13,9 +13,11 @@
   <main>
     <div class="chat-container">
         <ul #chatMessageList class="chat-messages">
-          <li *ngFor="let m of messages" class="{{m.getMessageClass()}}">
-            <div class="chat-message-username">{{m.username}}:</div>
-            <div class="chat-message-text">{{m.text}} <time>{{m.time | date:'shortTime':'+02:00':'de'}}</time></div>
+          <li *ngFor="let m of messages">
+            <div class="{{m.getMessageClass()}}">
+              <div class="chat-message-username">{{m.username}}:</div>
+              <div class="chat-message-text">{{m.text}} <time>{{m.time | date:'shortTime':'+02:00':'de'}}</time></div>
+            </div>
           </li>
         </ul>
         <ul class="user-list" [@openClose]="isOpen ? 'open' : 'closed'">
